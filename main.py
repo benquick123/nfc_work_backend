@@ -126,6 +126,11 @@ class send_nfc_event:
                 add_hours = timediff.seconds // 3600
                 add_minutes = (timediff.seconds % 3600) / 60
                 timediff = "+%02d:%02d" % (add_hours, add_minutes)
+            elif len(hours) % 2 == 0 and len(hours) > 0 and hours[-1].timestamp + timedelta(minutes=1) > timestamp:
+                timediff = timestamp - hours[-2].timestamp
+                add_hours = timediff.seconds // 3600
+                add_minutes = (timediff.seconds % 3600) / 60
+                timediff = "+%02d:%02d" % (add_hours, add_minutes)
             
             if len(hours) > 0 and hours[-1].timestamp + timedelta(minutes=1) > timestamp:
                 return json.dumps({'response': "SUCCESS", "timestamp": str(timestamp), 'type': 'arrive' if len(hours) % 2 == 1 else 'leave', 'message': 'timestamps too close together', "timediff": timediff})
